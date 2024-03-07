@@ -1,7 +1,6 @@
 //gameboard module pattern
 
 
-
 const boardManager = (function(){
     let gameBoardObject = new Array(3).fill("").map((row)=> new Array(3))
 
@@ -40,10 +39,11 @@ const boardManager = (function(){
                 ]
                 break;
             case "ver":
+                //FIXME:
                 gameBoardObject = [
-                    ["","X",""],
-                    ["","X",""],
-                    ["","",""],
+                    ["","","O"],
+                    ["","","O"],
+                    ["","","O"],
                 ]
                 break;
             case "diag":
@@ -82,12 +82,14 @@ const playerController = (function(){
     function getCurrentPlayer(){
         return currentPlayer
     }
+
+    // double module pattern
         
-    const scoreKeeper = function(){
+    const scoreKeeper = (function(){
         let scoreX = 0;
         let scoreO = 0;
         //TODO: check winning patterns
-        function checkWinningPattern(){
+        function checkWinningPattern(...args){
             let board 
             board = boardManager.createTestBoard("hor")
             // if(
@@ -98,34 +100,47 @@ const playerController = (function(){
 
             //     //Ver
             board = boardManager.createTestBoard("ver")
-            console.log(board);
-                for(let y=0; y<2; y++){
-                    if(
-                    board[0][y] === board[1][y] 
-                    && board[1][y] === board[2][y] 
-                    ){
-                        return true
-                    }else{
-                        return false
-                    }
-                }
-                //diag
-                
-            //     ){
-            //     return true
-            // } else{
-            //     return false
-            // }
+            console.log({board});
+            // const conditionsArray = [
+            //     // cell === 'X',
+            //     // cell === 'O'
+            // ]
 
-        
-            //Vertical
-            // board = boardManager.createTestBoard("ver")
-            // return board.
-            //Diagonal
+             const conditionsArray = args
+
+            // conditionsArray.push('cell' === token1)
+            console.log({conditionsArray});
+
+            //FIXME: figure out the double loop
+            for(let col=0; col<3; col++){
+                //reset verticalArray
+
+                let verticalArray = []
+
+                for(let row=0; row<3; row++){
+                    // if(
+                    //     //TODO: accommodate a list of allowable pre-defined tokens
+               
+                    verticalArray.push(board[row][col])
+                }
+                console.log({verticalArray});
+                let rowResult = false; //check if there is a pttern match
+                
+                rowResult = 
+                conditionsArray.some(condition =>{
+                    return verticalArray.every(cell => cell === condition)
+                })
+                console.log({rowResult});
+
+                if(rowResult){return rowResult}
+
+            }            
+           
+            return false
         }
 
-        return checkWinningPattern()
-    }
+        return {checkWinningPattern}
+    })()
 
 
     return {getMoveFromPlayer, goToNextRound, getCurrentPlayer, scoreKeeper}
