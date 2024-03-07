@@ -48,9 +48,9 @@ const boardManager = (function(){
                 break;
             case "diag":
                 gameBoardObject = [
-                    ["X","",""],
-                    ["","X",""],
                     ["","","X"],
+                    ["","X",""],
+                    ["X","",""],
                 ]
                 break;
             case "rand":
@@ -90,7 +90,10 @@ const playerController = (function(){
         let scoreO = 0;
         function checkWinningPattern(...args){
             let board 
-            board = boardManager.createTestBoard("hor")
+            const conditionsArray = args
+            console.log({conditionsArray});
+
+            // board = boardManager.createTestBoard("hor")
             // if(
             //     //Hor
             // return board.some(row => 
@@ -98,31 +101,68 @@ const playerController = (function(){
             //     || row.toString() === ['O','O','O'].toString())
 
             //     //Ver
-            board = boardManager.createTestBoard("ver")
-            console.log({board});
+            // board = boardManager.createTestBoard("ver")
+            // console.log({board});
 
-             const conditionsArray = args
-            console.log({conditionsArray});
+            //  const conditionsArray = args
+            // console.log({conditionsArray});
 
-            for(let col=0; col<3; col++){
+            // for(let col=0; col<3; col++){
 
-                let verticalArray = []
+            //     let verticalArray = []
 
-                for(let row=0; row<3; row++){
-                    verticalArray.push(board[row][col])
-                }
-                let rowResult = false; //check if there is a pttern match
+            //     for(let row=0; row<3; row++){
+            //         verticalArray.push(board[row][col])
+            //     }
+            //     let rowResult = false; //check if there is a pttern match
                 
-                rowResult = 
-                conditionsArray.some(condition =>{
-                    return verticalArray.every(cell => cell === condition)
-                })
+            //     rowResult = 
+            //     conditionsArray.some(condition =>{
+            //         return verticalArray.every(cell => cell === condition)
+            //     })
 
-                if(rowResult){return rowResult}
+            //     if(rowResult){return rowResult}
 
-            }            
+            // }            
            
-            return false
+            // return false
+
+
+            //Diag check
+            board = boardManager.createTestBoard("diag")
+            console.log({board});
+            
+            return conditionsArray.some(token => {
+                var patternResult;
+
+                //left-to-right Diag
+                for(let i=0; i<3; i++){
+                    if(board[i][i] === token){
+                        patternResult = true;
+                    } else {
+                        patternResult = false
+                        return
+                        }
+                    }                
+                    //skip right-to-left if left-right true
+                if (patternResult) return patternResult;
+                
+                //right-to-left Diag
+                    // [0][2], [1][1], [0][0]
+                let arrayLastIndex = board[0].length() - 1
+                for(let i=0; i<3; i++){
+                    if(board[i][arrayLastIndex - i] === token){
+                        patternResult = true;
+                    } else {
+                        patternResult = false
+                        return
+                        }
+                }
+                return patternResult
+
+            })
+            
+
         }
 
         return {checkWinningPattern}
