@@ -88,7 +88,6 @@ const playerController = (function(){
     const scoreKeeper = (function(){
         let scoreX = 0;
         let scoreO = 0;
-        //TODO: check winning patterns
         function checkWinningPattern(...args){
             let board 
             board = boardManager.createTestBoard("hor")
@@ -101,36 +100,23 @@ const playerController = (function(){
             //     //Ver
             board = boardManager.createTestBoard("ver")
             console.log({board});
-            // const conditionsArray = [
-            //     // cell === 'X',
-            //     // cell === 'O'
-            // ]
 
              const conditionsArray = args
-
-            // conditionsArray.push('cell' === token1)
             console.log({conditionsArray});
 
-            //FIXME: figure out the double loop
             for(let col=0; col<3; col++){
-                //reset verticalArray
 
                 let verticalArray = []
 
                 for(let row=0; row<3; row++){
-                    // if(
-                    //     //TODO: accommodate a list of allowable pre-defined tokens
-               
                     verticalArray.push(board[row][col])
                 }
-                console.log({verticalArray});
                 let rowResult = false; //check if there is a pttern match
                 
                 rowResult = 
                 conditionsArray.some(condition =>{
                     return verticalArray.every(cell => cell === condition)
                 })
-                console.log({rowResult});
 
                 if(rowResult){return rowResult}
 
