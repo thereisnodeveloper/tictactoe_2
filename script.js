@@ -24,7 +24,39 @@ const boardManager = (function(){
         return gameBoardObject
     }
 
-    return {returnGameBoard, addToGameBoard, resetGameBoard}
+    function createTestBoard(){
+        let pattern = prompt('enter pattern (hor, ver, diag)')
+        switch (pattern){
+            case "hor":
+                gameBoardObject = [
+                    ["X","X","X"],
+                    ["","",""],
+                    ["","",""],
+                ]
+                break;
+            case "ver":
+                gameBoardObject = [
+                    ["X","",""],
+                    ["X","",""],
+                    ["X","",""],
+                ]
+                break;
+            case "diag":
+                gameBoardObject = [
+                    ["X","",""],
+                    ["","X",""],
+                    ["","","X"],
+                ]
+                break;
+            case "rand":
+                break;
+        }
+        
+     
+        return gameBoardObject
+    }
+
+    return {returnGameBoard, addToGameBoard, resetGameBoard,createTestBoard}
 })()
 
 const playerController = (function(){
