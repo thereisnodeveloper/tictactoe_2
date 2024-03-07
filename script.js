@@ -24,27 +24,37 @@ const boardManager = (function(){
         return gameBoardObject
     }
 
-    return {returnGameBoard, addToGameBoard, resetGameBoard}
-})()
-
-const playerController = (function(){
-    let round = 1
-    let currentPlayer = 'X'
-
-    function getMoveFromPlayer(){
-        const moveCoords = prompt('enter coordinates as "row,column" (i.e. 1,1 or 2,1)').split(",")
-        boardManager.addToGameBoard(currentPlayer, moveCoords)
+    function createTestBoard(){
+        let pattern = prompt('enter pattern (hor, ver, diag)')
+        switch (pattern){
+            case "hor":
+                gameBoardObject = [
+                    ["X","X","X"],
+                    ["","",""],
+                    ["","",""],
+                ]
+                break;
+            case "ver":
+                gameBoardObject = [
+                    ["X","",""],
+                    ["X","",""],
+                    ["X","",""],
+                ]
+                break;
+            case "diag":
+                gameBoardObject = [
+                    ["X","",""],
+                    ["","X",""],
+                    ["","","X"],
+                ]
+                break;
+            case "rand":
+                break;
+        }
+        
+     
+        return gameBoardObject
     }
 
-    function goToNextRound(){
-        round++
-        currentPlayer === 'X' ? currentPlayer = 'O' : currentPlayer = 'X'
-        return round
-    }
-
-    function getCurrentPlayer(){
-        return currentPlayer
-    }
-    
-    return {getMoveFromPlayer, goToNextRound, getCurrentPlayer}
+    return {returnGameBoard, addToGameBoard, resetGameBoard,createTestBoard}
 })()
