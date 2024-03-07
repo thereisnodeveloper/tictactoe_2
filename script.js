@@ -3,7 +3,7 @@
 
 
 const boardManager = (function(){
-    const gameBoardObject = new Array(3).fill(null).map((row)=> new Array(3))
+    let gameBoardObject = new Array(3).fill(null).map((row)=> new Array(3))
 
     function returnGameBoard(){
         return gameBoardObject
@@ -16,11 +16,8 @@ const boardManager = (function(){
     }
     
     function resetGameBoard(){
-        gameBoardObject.forEach((row)=>{
-            row.forEach((cell)=>{
-                cell = null
-            })
-        })
+        gameBoardObject = new Array(3).fill(null).map((row)=> new Array(3))
+
         return gameBoardObject
     }
 
