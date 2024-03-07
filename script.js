@@ -3,7 +3,7 @@
 
 
 const boardManager = (function(){
-    let gameBoardObject = new Array(3).fill(null).map((row)=> new Array(3))
+    let gameBoardObject = new Array(3).fill("").map((row)=> new Array(3))
 
     function returnGameBoard(){
         return gameBoardObject
@@ -17,12 +17,34 @@ const boardManager = (function(){
     
     function resetGameBoard(){
         // gameBoardObject = new Array(3).fill(null).map((row)=> new Array(3))
-        gameBoardObject.map(element => {
-            element.fill(null) 
+        gameBoardObject.map(row => {
+            row.fill("") 
                })
 
         return gameBoardObject
     }
 
     return {returnGameBoard, addToGameBoard, resetGameBoard}
+})()
+
+const playerController = (function(){
+    let round = 1
+    let currentPlayer = 'X'
+
+    function getMoveFromPlayer(){
+        const moveCoords = prompt('enter coordinates as "row,column" (i.e. 1,1 or 2,1)').split(",")
+        boardManager.addToGameBoard(currentPlayer, moveCoords)
+    }
+
+    function goToNextRound(){
+        round++
+        currentPlayer === 'X' ? currentPlayer = 'Y' : currentPlayer = 'X'
+        return round
+    }
+
+    function getCurrentPlayer(){
+        return currentPlayer
+    }
+    
+    return {getMoveFromPlayer, goToNextRound, getCurrentPlayer}
 })()
