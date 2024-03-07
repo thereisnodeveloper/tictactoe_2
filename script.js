@@ -16,7 +16,10 @@ const boardManager = (function(){
     }
     
     function resetGameBoard(){
-        gameBoardObject = new Array(3).fill(null).map((row)=> new Array(3))
+        // gameBoardObject = new Array(3).fill(null).map((row)=> new Array(3))
+        gameBoardObject.map(element => {
+            element.fill(null) 
+               })
 
         return gameBoardObject
     }
