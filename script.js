@@ -24,8 +24,13 @@ const boardManager = (function(){
         return gameBoardObject
     }
 
-    function createTestBoard(){
-        let pattern = prompt('enter pattern (hor, ver, diag)')
+    function createTestBoard(boardPattern){
+        let pattern = boardPattern
+        if(!pattern){
+            pattern = prompt('enter pattern (hor, ver, diag)')
+        } else {
+            pattern = pattern
+        }
         switch (pattern){
             case "hor":
                 gameBoardObject = [
@@ -36,9 +41,9 @@ const boardManager = (function(){
                 break;
             case "ver":
                 gameBoardObject = [
-                    ["X","",""],
-                    ["X","",""],
-                    ["X","",""],
+                    ["","X",""],
+                    ["","X",""],
+                    ["","",""],
                 ]
                 break;
             case "diag":
@@ -77,6 +82,51 @@ const playerController = (function(){
     function getCurrentPlayer(){
         return currentPlayer
     }
-    
-    return {getMoveFromPlayer, goToNextRound, getCurrentPlayer}
+        
+    const scoreKeeper = function(){
+        let scoreX = 0;
+        let scoreO = 0;
+        //TODO: check winning patterns
+        function checkWinningPattern(){
+            let board 
+            board = boardManager.createTestBoard("hor")
+            // if(
+            //     //Hor
+            // return board.some(row => 
+            //     row.toString() === ['X','X','X'].toString() 
+            //     || row.toString() === ['O','O','O'].toString())
+
+            //     //Ver
+            board = boardManager.createTestBoard("ver")
+            console.log(board);
+                for(let y=0; y<2; y++){
+                    if(
+                    board[0][y] === board[1][y] 
+                    && board[1][y] === board[2][y] 
+                    ){
+                        return true
+                    }else{
+                        return false
+                    }
+                }
+                //diag
+                
+            //     ){
+            //     return true
+            // } else{
+            //     return false
+            // }
+
+        
+            //Vertical
+            // board = boardManager.createTestBoard("ver")
+            // return board.
+            //Diagonal
+        }
+
+        return checkWinningPattern()
+    }
+
+
+    return {getMoveFromPlayer, goToNextRound, getCurrentPlayer, scoreKeeper}
 })()
