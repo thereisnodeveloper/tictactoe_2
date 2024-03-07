@@ -38,7 +38,7 @@ const playerController = (function(){
 
     function goToNextRound(){
         round++
-        currentPlayer === 'X' ? currentPlayer = 'Y' : currentPlayer = 'X'
+        currentPlayer === 'X' ? currentPlayer = 'O' : currentPlayer = 'X'
         return round
     }
 
