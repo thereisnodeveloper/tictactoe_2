@@ -39,7 +39,6 @@ const boardManager = (function(){
                 ]
                 break;
             case "ver":
-                //FIXME:
                 gameBoardObject = [
                     ["","","O"],
                     ["","","O"],
@@ -48,12 +47,19 @@ const boardManager = (function(){
                 break;
             case "diag":
                 gameBoardObject = [
-                    ["O","X","X"],
-                    ["O","X",""],
-                    ["O","",""],
+                    ["","","X"],
+                    ["","X",""],
+                    ["X","",""],
                 ]
                 break;
             case "rand":
+                gameBoardObject = [
+                    ["","",""],
+                    ["","",""],
+                    ["","",""],
+                ]
+                Array(3).fill()
+
                 break;
         }
         
@@ -88,9 +94,17 @@ const playerController = (function(){
     const scoreKeeper = (function(){
         let scoreX = 0;
         let scoreO = 0;
+
+
+        function saveTokens(...args){
+            let tokenArray = args
+            return tokenArray
+        }
+        let tokenArray = saveTokens('O','X')
+
         function checkWinningPattern(...args){
             let board 
-            const conditionsArray = args
+            const conditionsArray = tokenArray
             console.log({conditionsArray});
 
             // board = boardManager.returnGameBoard()
