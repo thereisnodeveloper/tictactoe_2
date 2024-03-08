@@ -1,5 +1,19 @@
 //gameboard module pattern
 
+const displayManager = (function(){
+    
+    function createBoardDisplay(){
+
+        const boardContainer =  document.createElement('div')
+        boardContainer.
+        const boardCell = document.createElement('div')
+    }
+    function updateDisplay(){
+
+    }
+
+})()
+
 
 const boardManager = (function(){
     let gameBoardObject = new Array(3).fill("").map((row)=> new Array(3))
@@ -150,8 +164,7 @@ const playerController = (function(){
 
                 //left-to-right Diag
                 for(let i=0; i<3; i++){
-                    if(board[i][i] === token){
-                        patternResult = true;
+                    if(board[i][i] === token){                        patternResult = true;
                     } else {
                         patternResult = false
                         break
