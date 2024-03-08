@@ -141,7 +141,7 @@ const playerController = (function(){
                         patternResult = true;
                     } else {
                         patternResult = false
-                        return
+                        break
                         }
                     }                
                     //skip right-to-left if left-right true
@@ -149,13 +149,13 @@ const playerController = (function(){
                 
                 //right-to-left Diag
                     // [0][2], [1][1], [0][0]
-                let arrayLastIndex = board[0].length() - 1
+                let arrayLastIndex = board[0].length - 1
                 for(let i=0; i<3; i++){
                     if(board[i][arrayLastIndex - i] === token){
                         patternResult = true;
                     } else {
                         patternResult = false
-                        return
+                        break
                         }
                 }
                 return patternResult
