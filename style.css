@@ -1,0 +1,26 @@
+:root{
+    --board-container-width: 500px
+}
+
+body{
+    background-color: gray;
+}
+
+.boardContainer{
+    border: 5px solid #000;
+    display: grid;
+    width: var(--board-container-width);
+    height: var(--board-container-width);
+    /* grid-template-areas: repeat(3, calc(var(--board-container-width)/3)) / repeat(3, calc(var(--board-container-width)/3)) ; */
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    /* grid-template-columns: 150px 150px 150px;
+    grid-template-rows: 150px 150px 150px; */
+    margin: 50px auto
+}
+
+.cell{
+    background-color: #c29941;
+    border: 1px solid #000;
+    /* width: calc(var(--board-container-width)/3); */
+    /* height: calc(var(--board-container-width)/3); */
+}

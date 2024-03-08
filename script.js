@@ -5,7 +5,6 @@ const displayManager = (function(){
     function createBoardDisplay(){
 
         const boardContainer =  document.createElement('div')
-        boardContainer.
         const boardCell = document.createElement('div')
     }
     function updateDisplay(){
