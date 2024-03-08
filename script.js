@@ -1,8 +1,23 @@
 //gameboard module pattern
 
+//tests
+
+
 
 const boardManager = (function(){
-    let gameBoardObject = new Array(3).fill("").map((row)=> new Array(3))
+    // let gameBoardObject = new Array(3).map((row)=> new Array(3).fill("_"))
+    const gameBoardObject = [
+        ["_","_","_"],
+        ["_","_","_"],
+        ["_","_","_"],
+    ]
+    console.log(gameBoardObject);
+    function checkCellOccupied(row,col){
+        gameBoard = gameBoardObject
+        const result = gameBoard[row,col] === "_"
+        console.log(`Is cell empty: ${result}`);
+        return result
+    }
 
     function returnGameBoard(){
         return gameBoardObject
@@ -11,13 +26,14 @@ const boardManager = (function(){
     function addToGameBoard(piece, location = [0,0]){
         const [row, column] = location
         gameBoardObject[row][column] = piece
+        console.log(`Player (${piece}) plays (${location})`);
         return gameBoardObject
     }
     
     function resetGameBoard(){
         // gameBoardObject = new Array(3).fill(null).map((row)=> new Array(3))
         gameBoardObject.map(row => {
-            row.fill("") 
+            row.fill("_") 
                })
 
         return gameBoardObject
@@ -34,45 +50,41 @@ const boardManager = (function(){
             case "hor":
                 gameBoardObject = [
                     ["X","X","X"],
-                    ["","",""],
-                    ["","",""],
+                    ["_","_","_"],
+                    ["_","_","_"],
                 ]
                 break;
             case "ver":
                 gameBoardObject = [
-                    ["","","O"],
-                    ["","","O"],
-                    ["","","O"],
+                    ["_","_","O"],
+                    ["_","_","O"],
+                    ["_","_","O"],
                 ]
                 break;
             case "diag":
                 gameBoardObject = [
-                    ["","","X"],
-                    ["","X",""],
-                    ["X","",""],
+                    ["_","_","X"],
+                    ["_","X","_"],
+                    ["X","_","_"],
                 ]
                 break;
-            case "rand":
-                gameBoardObject = [
-                    ["","",""],
-                    ["","",""],
-                    ["","",""],
-                ]
-                Array(3).fill()
 
-                break;
         }
         
      
         return gameBoardObject
     }
 
-    return {returnGameBoard, addToGameBoard, resetGameBoard,createTestBoard}
+    return {returnGameBoard, addToGameBoard, resetGameBoard,createTestBoard, checkCellOccupied }
 })()
 
 const playerController = (function(){
     let round = 1
     let currentPlayer = 'X'
+
+    function getCurrentRound(){
+        return round
+    }
 
     function getMoveFromPlayer(){
         const moveCoords = prompt('enter coordinates as "row,column" (i.e. 1,1 or 2,1)').split(",")
@@ -102,13 +114,11 @@ const playerController = (function(){
         }
         let tokenArray = saveTokens('O','X')
 
-        function checkWinningPattern(...args){
-            let board 
+        function checkWinningPattern(){
             const conditionsArray = tokenArray
-            console.log({conditionsArray});
+            // console.log({conditionsArray});
 
-            // board = boardManager.returnGameBoard()
-            board = boardManager.createTestBoard('diag')
+            board = boardManager.returnGameBoard()
 
             console.log({board});
             
@@ -182,5 +192,37 @@ const playerController = (function(){
     })()
 
 
-    return {getMoveFromPlayer, goToNextRound, getCurrentPlayer, scoreKeeper}
+    return {getMoveFromPlayer, goToNextRound, getCurrentPlayer, scoreKeeper, getCurrentRound}
 })()
+
+
+
+// function randomPlay(){
+//     const whoIsPlaying = playerController.getCurrentPlayer()
+//     let randRow = Math.floor(Math.random()*3)
+//     let randColumn = Math.floor(Math.random()*3)
+
+//     if(!boardManager.checkCellOccupied(randRow,randColumn)){
+//         boardManager.addToGameBoard(whoIsPlaying,[randRow,randColumn])
+//     } 
+// }
+
+function simulatePlay(){
+    if(!playerController.scoreKeeper.checkWinningPattern()
+        || playerController.getCurrentRound() < 9){
+        
+        const whoIsPlaying = playerController.getCurrentPlayer()
+        let randRow = Math.floor(Math.random()*3)
+        let randColumn = Math.floor(Math.random()*3)
+
+
+        console.log(`Round: ${playerController.getCurrentRound()}`);
+        console.log(`${playerController.getCurrentPlayer()}`);
+
+        if(!boardManager.checkCellOccupied(randRow,randColumn)){
+            boardManager.addToGameBoard(whoIsPlaying,[randRow,randColumn])
+            playerController.goToNextRound()
+        } 
+        
+    }
+}
