@@ -48,9 +48,9 @@ const boardManager = (function(){
                 break;
             case "diag":
                 gameBoardObject = [
-                    ["","","X"],
-                    ["","X",""],
-                    ["X","",""],
+                    ["O","X","X"],
+                    ["O","X",""],
+                    ["O","",""],
                 ]
                 break;
             case "rand":
@@ -93,46 +93,45 @@ const playerController = (function(){
             const conditionsArray = args
             console.log({conditionsArray});
 
-            // board = boardManager.createTestBoard("hor")
-            // if(
-            //     //Hor
-            // return board.some(row => 
-            //     row.toString() === ['X','X','X'].toString() 
-            //     || row.toString() === ['O','O','O'].toString())
+            // board = boardManager.returnGameBoard()
+            board = boardManager.createTestBoard('diag')
 
-            //     //Ver
-            // board = boardManager.createTestBoard("ver")
-            // console.log({board});
+            console.log({board});
+            
+                //Hor
+            if( board.some(row => 
+                row.toString() === ['X','X','X'].toString() 
+                || row.toString() === ['O','O','O'].toString())){
+                    return true
+                }
+            
 
-            //  const conditionsArray = args
-            // console.log({conditionsArray});
+                //Ver
 
-            // for(let col=0; col<3; col++){
 
-            //     let verticalArray = []
+            for(let col=0; col<3; col++){
 
-            //     for(let row=0; row<3; row++){
-            //         verticalArray.push(board[row][col])
-            //     }
-            //     let rowResult = false; //check if there is a pttern match
+                let verticalArray = []
+
+                for(let row=0; row<3; row++){
+                    verticalArray.push(board[row][col])
+                }
+                let rowResult = false; //check if there is a pttern match
                 
-            //     rowResult = 
-            //     conditionsArray.some(condition =>{
-            //         return verticalArray.every(cell => cell === condition)
-            //     })
+                rowResult = 
+                conditionsArray.some(condition =>{
+                    return verticalArray.every(cell => cell === condition)
+                })
 
-            //     if(rowResult){return rowResult}
-
-            // }            
+                if(rowResult){return rowResult}
+            }            
            
-            // return false
 
 
             //Diag check
-            board = boardManager.createTestBoard("diag")
-            console.log({board});
             
-            return conditionsArray.some(token => {
+            let diagResult =
+            conditionsArray.some(token => {
                 var patternResult;
 
                 //left-to-right Diag
@@ -158,10 +157,10 @@ const playerController = (function(){
                         break
                         }
                 }
-                return patternResult
-
+                return  patternResult
             })
             
+            return diagResult
 
         }
 
