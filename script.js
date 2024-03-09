@@ -11,8 +11,16 @@ const boardManager = (function(){
 
     function addToGameBoard(piece, location = [0,0]){
         const [row, column] = location
-        gameBoardObject[row][column] = piece
+        if(gameBoardObject[row][column] !== 'X'
+        && gameBoardObject[row][column] !== 'O')
+
+        {gameBoardObject[row][column] = piece
+
         return gameBoardObject
+        } else {
+            return 'Square Occupied'
+        }
+
     }
     
     function resetGameBoard(){
