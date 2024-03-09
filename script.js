@@ -2,29 +2,40 @@
 
 const displayManager = (function(){
     
-    function updateDisplay(){
+
+    //TODO: display round, current player
+    function showCurrentPlayer(){
+        const currentPlayer = playerController.getCurrentPlayer()
+        document.querySelector('.player-text').textContent = currentPlayer
+    }
+
+    function showRound(){
+        const round = playerController.getRound()
+        document.querySelector('.round-text').textContent = round
+    }
+
+    function showBoard(){
         const board = boardManager.createTestBoard('ver')
-    //    const board = boardManager.returnGameBoard()
-        console.log(board);
 
         const flattenedBoard = board.flat()
-<<<<<<< Updated upstream
-        flattenedBoard.forEach(cell =>{
-
-            // FIXME:findIndex works only for 1st cell. flatten() is bad because it breaks the 
-            // row structure of the board
-            let cellIndex = 1;
-=======
         let cellIndex = 1;
 
         flattenedBoard.forEach(cell =>{
 
->>>>>>> Stashed changes
             const cellElement = document.querySelector(`[index="${cellIndex}"]`)
             cellElement.textContent = cell
-            // document.querySelector('.cell 1').textContent = cell
             cellIndex++
         })
+    }
+    
+
+    //TODO: let user click square to add token
+
+
+    function updateDisplay(){
+        showBoard()
+        showRound()
+        showCurrentPlayer()
     }
     return {updateDisplay}
 })()
@@ -117,7 +128,11 @@ const playerController = (function(){
     function getCurrentPlayer(){
         return currentPlayer
     }
-
+        
+    function getRound(){
+        return round
+    }
+    
     // double module pattern
         
     const scoreKeeper = (function(){
@@ -131,6 +146,7 @@ const playerController = (function(){
         }
         let tokenArray = saveTokens('O','X')
 
+   
         function checkWinningPattern(...args){
             let board 
             const conditionsArray = tokenArray
@@ -210,5 +226,5 @@ const playerController = (function(){
     })()
 
 
-    return {getMoveFromPlayer, goToNextRound, getCurrentPlayer, scoreKeeper}
+    return {getMoveFromPlayer, goToNextRound, getCurrentPlayer, scoreKeeper, getRound}
 })()
