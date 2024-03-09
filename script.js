@@ -6,10 +6,17 @@ const displayManager = (function(){
         const board = boardManager.createTestBoard('ver')
     //    const board = boardManager.returnGameBoard()
         console.log(board);
+
         const flattenedBoard = board.flat()
         flattenedBoard.forEach(cell =>{
-            const cellIndex = flattenedBoard.findIndex(cell)
-            document.querySelector(`.cell ${cellIndex+1}`).textContent = cell
+
+            // FIXME:findIndex works only for 1st cell. flatten() is bad because it breaks the 
+            // row structure of the board
+            let cellIndex = 1;
+            const cellElement = document.querySelector(`[index="${cellIndex}"]`)
+            cellElement.textContent = cell
+            // document.querySelector('.cell 1').textContent = cell
+            cellIndex++
         })
     }
     return {updateDisplay}
@@ -17,7 +24,7 @@ const displayManager = (function(){
 
 
 const boardManager = (function(){
-    let gameBoardObject = new Array(3).fill("").map((row)=> new Array(3))
+    let gameBoardObject = new Array(3).fill("_").map((row)=> new Array(3))
 
     function returnGameBoard(){
         return gameBoardObject
@@ -32,7 +39,7 @@ const boardManager = (function(){
     function resetGameBoard(){
         // gameBoardObject = new Array(3).fill(null).map((row)=> new Array(3))
         gameBoardObject.map(row => {
-            row.fill("") 
+            row.fill("_") 
                })
 
         return gameBoardObject
@@ -49,29 +56,29 @@ const boardManager = (function(){
             case "hor":
                 gameBoardObject = [
                     ["X","X","X"],
-                    ["","",""],
-                    ["","",""],
+                    ["_","_","_"],
+                    ["_","_","_"],
                 ]
                 break;
             case "ver":
                 gameBoardObject = [
-                    ["","","O"],
-                    ["","","O"],
-                    ["","","O"],
+                    ["_","_","O"],
+                    ["_","_","O"],
+                    ["_","_","O"],
                 ]
                 break;
             case "diag":
                 gameBoardObject = [
-                    ["","","X"],
-                    ["","X",""],
-                    ["X","",""],
+                    ["_","_","X"],
+                    ["_","X","_"],
+                    ["X","_","_"],
                 ]
                 break;
             case "rand":
                 gameBoardObject = [
-                    ["","",""],
-                    ["","",""],
-                    ["","",""],
+                    ["_","_","_"],
+                    ["_","_","_"],
+                    ["_","_","_"],
                 ]
                 Array(3).fill()
 
