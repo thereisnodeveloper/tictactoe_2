@@ -3,7 +3,6 @@
 const displayManager = (function(){
     
 
-    //TODO: display round, current player
     function showCurrentPlayer(){
         const currentPlayer = playerController.getCurrentPlayer()
         document.querySelector('.player-text').textContent = currentPlayer
@@ -30,7 +29,14 @@ const displayManager = (function(){
     
 
     //TODO: let user click square to add token
+    function addToSquareOnClick(e){
+        console.log(e.target);
+        
+    }
 
+    (function attachEventListeners(){
+        document.addEventListener('click', addToSquareOnClick)
+    })()
 
     function updateDisplay(){
         showBoard()
