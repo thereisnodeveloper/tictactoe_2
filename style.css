@@ -12,7 +12,12 @@ body{
     width: var(--board-container-width);
     height: var(--board-container-width);
     grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+<<<<<<< Updated upstream
     margin: 50px auto
+=======
+    margin: 50px auto;
+    grid-auto-flow: row;
+>>>>>>> Stashed changes
 }
 
 .cell{
@@ -20,4 +25,8 @@ body{
     border: 1px solid #000;
     font-size: clamp(30px,calc(var(--board-container-width)/3*0.7) , var(--board-container-width));
     text-align: center;
+<<<<<<< Updated upstream
+=======
+    
+>>>>>>> Stashed changes
 }

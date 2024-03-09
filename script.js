@@ -8,11 +8,18 @@ const displayManager = (function(){
         console.log(board);
 
         const flattenedBoard = board.flat()
+<<<<<<< Updated upstream
         flattenedBoard.forEach(cell =>{
 
             // FIXME:findIndex works only for 1st cell. flatten() is bad because it breaks the 
             // row structure of the board
             let cellIndex = 1;
+=======
+        let cellIndex = 1;
+
+        flattenedBoard.forEach(cell =>{
+
+>>>>>>> Stashed changes
             const cellElement = document.querySelector(`[index="${cellIndex}"]`)
             cellElement.textContent = cell
             // document.querySelector('.cell 1').textContent = cell
