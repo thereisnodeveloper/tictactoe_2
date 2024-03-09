@@ -2,15 +2,17 @@
 
 const displayManager = (function(){
     
-    function createBoardDisplay(){
-
-        const boardContainer =  document.createElement('div')
-        const boardCell = document.createElement('div')
-    }
     function updateDisplay(){
-
+        const board = boardManager.createTestBoard('ver')
+    //    const board = boardManager.returnGameBoard()
+        console.log(board);
+        const flattenedBoard = board.flat()
+        flattenedBoard.forEach(cell =>{
+            const cellIndex = flattenedBoard.findIndex(cell)
+            document.querySelector(`.cell ${cellIndex+1}`).textContent = cell
+        })
     }
-
+    return {updateDisplay}
 })()
 
 
@@ -163,7 +165,7 @@ const playerController = (function(){
 
                 //left-to-right Diag
                 for(let i=0; i<3; i++){
-                    if(board[i][i] === token){                        patternResult = true;
+                    if(board[i][i] === token){ patternResult = true;
                     } else {
                         patternResult = false
                         break
