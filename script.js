@@ -1,8 +1,10 @@
 
 //gameboard module pattern
 
+
 const displayManager = (function(){
     
+    const message = document.querySelector('.message')
 
     function showCurrentPlayer(){
         const currentPlayer = playerController.getCurrentPlayer()
@@ -14,7 +16,11 @@ const displayManager = (function(){
         document.querySelector('.round-text').textContent = round
     }
 
-
+    function startGame(){
+            const squareDivs = document.querySelectorAll('.boardContainer > div')
+            squareDivs.forEach(square=> square.addEventListener('click', addToSquareOnClick))
+            updateDisplay()        
+    }
 
     function addToSquareOnClick(e){
         console.log(e.target);
@@ -31,11 +37,12 @@ const displayManager = (function(){
         
         
         //check if square is occupied
-        const message = document.querySelector('.message')
         if(boardManager.addToGameBoard(currentPlayer, coords ) === 'Square Occupied'){
             message.textContent = 'Square Occupied'
             return
-        } 
+        } else{
+            message.textContent = ' '
+        }
         e.target.textContent = currentPlayer
         
         //check if winning pattern
@@ -55,11 +62,7 @@ const displayManager = (function(){
         
     }
 
-    (function attachEventListeners(){
-        const squareDivs = document.querySelectorAll('.boardContainer > div')
-        squareDivs.forEach(square=> square.addEventListener('click', addToSquareOnClick))
     
-    })()
 
     function removeBoardEventListeners(){
         const boardElem = document.querySelector('.boardContainer')
@@ -71,12 +74,20 @@ const displayManager = (function(){
 
 
     function updateDisplay(){
-        // showBoard()
         showRound()
         showCurrentPlayer()
+        message.textContent = ' '
     }
-    return {updateDisplay}
+
+    function resetBoardDisplay(){
+        const squareDivs = document.querySelectorAll('.boardContainer > div')
+            squareDivs.forEach(square=> square.textContent = '')
+
+    }
+    return {updateDisplay, startGame, resetBoardDisplay}
 })()
+
+
 
 
 const boardManager = (function(){
@@ -101,11 +112,10 @@ const boardManager = (function(){
     }
     
     function resetGameBoard(){
-        // gameBoardObject = new Array(3).fill(null).map((row)=> new Array(3))
         gameBoardObject.map(row => {
             row.fill("_") 
                })
-
+               console.log(gameBoardObject);
         return gameBoardObject
     }
 
@@ -160,11 +170,6 @@ const playerController = (function(){
     let round = 1
     let currentPlayer = 'X'
 
-    // function getMoveFromPlayer(){
-    //     const moveCoords = prompt('enter coordinates as "row,column" (i.e. 1,1 or 2,1)').split(",")
-    //     boardManager.addToGameBoard(currentPlayer, moveCoords)
-    // }
-
     function goToNextRound(){
         round++
         currentPlayer === 'X' ? currentPlayer = 'O' : currentPlayer = 'X'
@@ -178,8 +183,15 @@ const playerController = (function(){
     function getRound(){
         return round
     }
+    function resetRound(){
+        round = 1
+    }
+    function resetPlayerToX(){
+        currentPlayer = 'X'
+    }
     
-    // double module pattern
+    
+    // double module pattern?
         
     const scoreKeeper = (function(){
         let scoreX = 0;
@@ -272,5 +284,18 @@ const playerController = (function(){
     })()
 
 
-    return {goToNextRound, getCurrentPlayer, scoreKeeper, getRound}
+
+    const initialize = (function(){
+        document.querySelector('.start-game').addEventListener('click', displayManager.startGame)
+        document.querySelector('.reset-game').addEventListener('click', ()=>{ 
+            boardManager.resetGameBoard()
+            displayManager.resetBoardDisplay()
+            resetRound()
+            resetPlayerToX()
+            displayManager.updateDisplay()
+
+        })
+    })()
+
+    return {goToNextRound, getCurrentPlayer, scoreKeeper, getRound, resetPlayerToX}
 })()
