@@ -31,11 +31,29 @@ const displayManager = (function(){
     //TODO: let user click square to add token
     function addToSquareOnClick(e){
         console.log(e.target);
+        const currentPlayer = playerController.getCurrentPlayer()
+        //check if square is occupied
+        if(boardManager.addToGameBoard(currentPlayer) === 'Square Occupied'){
+            document.querySelector('.message').textContent = 'Square Occupied'
+            return
+        } 
+        //FIXME:not working
+        
+        e.target.textContent = currentPlayer
+        
+        playerController.goToNextRound()
+        const round = playerController.getRound()
+        document.querySelector('.round-text').textContent = round
+        document.querySelector('.player-text').textContent = currentPlayer
+
+        displayManager.updateDisplay()
         
     }
 
     (function attachEventListeners(){
-        document.addEventListener('click', addToSquareOnClick)
+        const squareDivs = document.querySelectorAll('.boardContainer > div')
+        squareDivs.forEach(square=> square.addEventListener('click', addToSquareOnClick))
+    
     })()
 
     function updateDisplay(){
