@@ -13,32 +13,26 @@ const displayManager = (function(){
         document.querySelector('.round-text').textContent = round
     }
 
-    function showBoard(){
-        const board = boardManager.createTestBoard('ver')
 
-        const flattenedBoard = board.flat()
-        let cellIndex = 1;
 
-        flattenedBoard.forEach(cell =>{
-
-            const cellElement = document.querySelector(`[index="${cellIndex}"]`)
-            cellElement.textContent = cell
-            cellIndex++
-        })
-    }
-    
-
-    //TODO: let user click square to add token
     function addToSquareOnClick(e){
         console.log(e.target);
         const currentPlayer = playerController.getCurrentPlayer()
+        
+        //translate index to coordinates
+        const boardIndex = [
+            [[0,0],[0,1],[0,2]],
+            [[1,0],[1,1],[1,2]],
+            [[1,7],[1,8],[1,9]]
+        ]
+        const SquareIndex = e.target.getAttribute('index')
+        const coords = boardIndex.flat(1)[SquareIndex]
+       
         //check if square is occupied
-        if(boardManager.addToGameBoard(currentPlayer) === 'Square Occupied'){
+        if(boardManager.addToGameBoard(currentPlayer, coords ) === 'Square Occupied'){
             document.querySelector('.message').textContent = 'Square Occupied'
             return
         } 
-        //FIXME:not working
-        
         e.target.textContent = currentPlayer
         
         playerController.goToNextRound()
@@ -57,7 +51,7 @@ const displayManager = (function(){
     })()
 
     function updateDisplay(){
-        showBoard()
+        // showBoard()
         showRound()
         showCurrentPlayer()
     }
@@ -77,9 +71,9 @@ const boardManager = (function(){
         if(gameBoardObject[row][column] !== 'X'
         && gameBoardObject[row][column] !== 'O')
 
-        {gameBoardObject[row][column] = piece
-
-        return gameBoardObject
+        {
+            gameBoardObject[row][column] = piece
+            return gameBoardObject
         } else {
             return 'Square Occupied'
         }
@@ -146,10 +140,10 @@ const playerController = (function(){
     let round = 1
     let currentPlayer = 'X'
 
-    function getMoveFromPlayer(){
-        const moveCoords = prompt('enter coordinates as "row,column" (i.e. 1,1 or 2,1)').split(",")
-        boardManager.addToGameBoard(currentPlayer, moveCoords)
-    }
+    // function getMoveFromPlayer(){
+    //     const moveCoords = prompt('enter coordinates as "row,column" (i.e. 1,1 or 2,1)').split(",")
+    //     boardManager.addToGameBoard(currentPlayer, moveCoords)
+    // }
 
     function goToNextRound(){
         round++
@@ -184,8 +178,8 @@ const playerController = (function(){
             const conditionsArray = tokenArray
             console.log({conditionsArray});
 
-            // board = boardManager.returnGameBoard()
-            board = boardManager.createTestBoard('diag')
+            board = boardManager.returnGameBoard()
+            // board = boardManager.createTestBoard('diag')
 
             console.log({board});
             
@@ -258,5 +252,5 @@ const playerController = (function(){
     })()
 
 
-    return {getMoveFromPlayer, goToNextRound, getCurrentPlayer, scoreKeeper, getRound}
+    return {goToNextRound, getCurrentPlayer, scoreKeeper, getRound}
 })()
