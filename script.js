@@ -42,6 +42,7 @@ const displayManager = (function(){
         const result = playerController.scoreKeeper.checkWinningPattern()
         if(result){
             message.textContent = `Player ${currentPlayer} Wins!`
+            removeBoardEventListeners()
             return
         }
 
@@ -59,6 +60,15 @@ const displayManager = (function(){
         squareDivs.forEach(square=> square.addEventListener('click', addToSquareOnClick))
     
     })()
+
+    function removeBoardEventListeners(){
+        const boardElem = document.querySelector('.boardContainer')
+        const boardClone = boardElem.cloneNode(true)
+        //Both methods work
+        // boardElem.parentElement.replaceChild(boardClone, boardElem)
+        boardElem.replaceWith(boardClone)
+    }
+
 
     function updateDisplay(){
         // showBoard()
