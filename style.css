@@ -14,7 +14,9 @@ body{
     grid-template: repeat(3, 1fr) / repeat(3, 1fr);
     margin: 50px auto;
 }
-
+.cell.one{
+    background-color: #fff;
+}
 .cell{
     background-color: #c29941;
     border: 1px solid #000;

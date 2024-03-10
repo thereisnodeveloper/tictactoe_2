@@ -1,3 +1,4 @@
+
 //gameboard module pattern
 
 const displayManager = (function(){
@@ -23,18 +24,27 @@ const displayManager = (function(){
         const boardIndex = [
             [[0,0],[0,1],[0,2]],
             [[1,0],[1,1],[1,2]],
-            [[1,7],[1,8],[1,9]]
+            [[2,0],[2,1],[2,2]]
         ]
-        const SquareIndex = e.target.getAttribute('index')
+        const SquareIndex = e.target.getAttribute('index') - 1
         const coords = boardIndex.flat(1)[SquareIndex]
-       
+        
+        
         //check if square is occupied
+        const message = document.querySelector('.message')
         if(boardManager.addToGameBoard(currentPlayer, coords ) === 'Square Occupied'){
-            document.querySelector('.message').textContent = 'Square Occupied'
+            message.textContent = 'Square Occupied'
             return
         } 
         e.target.textContent = currentPlayer
         
+        //check if winning pattern
+        const result = playerController.scoreKeeper.checkWinningPattern()
+        if(result){
+            message.textContent = `Player ${currentPlayer} Wins!`
+            return
+        }
+
         playerController.goToNextRound()
         const round = playerController.getRound()
         document.querySelector('.round-text').textContent = round
@@ -176,7 +186,7 @@ const playerController = (function(){
         function checkWinningPattern(...args){
             let board 
             const conditionsArray = tokenArray
-            console.log({conditionsArray});
+            // console.log({conditionsArray});
 
             board = boardManager.returnGameBoard()
             // board = boardManager.createTestBoard('diag')
@@ -185,8 +195,8 @@ const playerController = (function(){
             
                 //Hor
             if( board.some(row => 
-                row.toString() === ['X','X','X'].toString() 
-                || row.toString() === ['O','O','O'].toString())){
+                row.join(',') === ['X','X','X'].join(',') 
+                || row.join(',') === ['O','O','O'].join(','))){
                     return true
                 }
             
