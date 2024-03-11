@@ -47,7 +47,7 @@ const displayManager = (function(){
         const dataObject = [...data.entries()]
         console.log(dataObject);
 
-
+// FIXME:
     const player1 = new Player(data['user-token'],data['user-name'])
     // const player2 = new Player()
 
