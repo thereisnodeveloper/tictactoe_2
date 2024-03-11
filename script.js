@@ -1,17 +1,9 @@
-
-
-
-
-
-
-
-
 // const selectPlayerButton1 = document.createElement('button')
 // const selectPlayerButton2 = document.createElement('button')
 // selectPlayerButton2.textContent('Player 2')
 // document.querySelector('.player-select').
 
-
+const gameController = (function(){
 
 const displayManager = (function(){
     
@@ -19,10 +11,15 @@ const displayManager = (function(){
 
     const displayPlayerForm = function(evt){
         const dialog = document.querySelector('dialog')
+        
         const playerText = document.createElement(`div`)
         playerText.classList.add('player-text')
+
         playerText.textContent = `${evt.target.textContent}`
+
+        //if text exist, replace rather than add another one
         dialog.prepend(playerText)
+
         dialog.showModal()
     }
 
@@ -39,29 +36,34 @@ const displayManager = (function(){
     const player1Button = createPlayerSelectButton('Player 1')
     const player2Button = createPlayerSelectButton('Player 2')
 
-   
-
-
 
     document.querySelector('form').addEventListener('submit', (evt)=>{
         evt.preventDefault()
         const data = new FormData(evt.target)
         const dialog = document.querySelector('dialog')
         dialog.close()
-        const dataObject = Object.fromEntries(data.entries())
+        dialog.innerHTML = ''
+        // const dataObject = Object.fromEntries(data.entries())
+        const dataObject = [...data.entries()]
         console.log(dataObject);
+
+
+    const player1 = new Player(data['user-token'],data['user-name'])
+    // const player2 = new Player()
+
+        console.log(player1);
 
         return
     })
 
 
     function showCurrentPlayer(){
-        const currentPlayer = playerController.getCurrentPlayer()
+        const currentPlayer = gameController.getCurrentPlayer()
         document.querySelector('.player-text').textContent = currentPlayer
     }
 
     function showRound(){
-        const round = playerController.getRound()
+        const round = gameController.getRound()
         document.querySelector('.round-text').textContent = round
     }
 
@@ -72,8 +74,7 @@ const displayManager = (function(){
     }
 
     function addToSquareOnClick(e){
-        console.log(e.target);
-        const currentPlayer = playerController.getCurrentPlayer()
+        const currentPlayer = gameController.getCurrentPlayer()
         
         //translate index to coordinates
         const boardIndex = [
@@ -95,15 +96,15 @@ const displayManager = (function(){
         e.target.textContent = currentPlayer
         
         //check if winning pattern
-        const result = playerController.scoreKeeper.checkWinningPattern()
+        const result = gameController.scoreKeeper.checkWinningPattern()
         if(result){
             message.textContent = `Player ${currentPlayer} Wins!`
             removeBoardEventListeners()
             return
         }
 
-        playerController.goToNextRound()
-        const round = playerController.getRound()
+        gameController.goToNextRound()
+        const round = gameController.getRound()
         document.querySelector('.round-text').textContent = round
         document.querySelector('.player-text').textContent = currentPlayer
 
@@ -213,7 +214,7 @@ const boardManager = (function(){
     return {returnGameBoard, addToGameBoard, resetGameBoard,createTestBoard}
 })()
 
-const playerController = (function(){
+
     let round = 1
     let currentPlayer = 'X'
 
@@ -225,8 +226,8 @@ const playerController = (function(){
     }
 
 
-    const player1 = new Player()
-    const player2 = new Player()
+    // const player1 = new Player()
+    // const player2 = new Player()
 
 
 
