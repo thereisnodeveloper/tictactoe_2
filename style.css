@@ -51,3 +51,37 @@ button{
     padding: 6px;
     box-shadow: 1px 3px ;
 }
+
+.player-select button, button[type='submit']{
+    font-size: larger;
+    background-color: rgb(49, 159, 67);
+    border-radius: 10px;
+    padding: 6px;
+    box-shadow: 1px 3px ;
+    margin: 10px;
+}
+
+h3{
+    font-size: larger;
+    margin: 10px;
+    font-weight: 800;
+}
+dialog{
+    background-color: #8e8c83;
+}
+
+form{
+    display:flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+form *{
+    margin: 3px;
+}
+
+.player-text{
+    font-size:large;
+    font-weight: 600;
+    margin: 8px 0
+}

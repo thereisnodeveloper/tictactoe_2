@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="player-select"><h3>Select Player:</h3></div>
     <h1 class="message"></h1>
     <div class="boardContainer">
         <div class="cell 1" index="1"></div>
@@ -36,6 +37,16 @@
             <button class="reset-game">Reset Game</button>
         </div>
     </div>
+    
+    <dialog>
+        <form action="?" method="post">
+            <label for="player-name">Player Name: <input type="text"
+            id="player-name" name="user-name" required></label>
+            <label for="token"> Input Token (any one character) <input
+            type="text" id="token" maxlength="1" name="user-token" required ></label>
+            <button type="submit">Accept</button>
+        </form>
+    </dialog>
  
 
     <script src="script.js"></script>

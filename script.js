@@ -1,10 +1,59 @@
 
-//gameboard module pattern
+
+
+
+
+
+
+
+// const selectPlayerButton1 = document.createElement('button')
+// const selectPlayerButton2 = document.createElement('button')
+// selectPlayerButton2.textContent('Player 2')
+// document.querySelector('.player-select').
+
 
 
 const displayManager = (function(){
     
     const message = document.querySelector('.message')
+
+    const displayPlayerForm = function(evt){
+        const dialog = document.querySelector('dialog')
+        const playerText = document.createElement(`div`)
+        playerText.classList.add('player-text')
+        playerText.textContent = `${evt.target.textContent}`
+        dialog.prepend(playerText)
+        dialog.showModal()
+    }
+
+    
+    const createPlayerSelectButton = function(player){
+        const selectPlayerButton = document.createElement('button')
+        selectPlayerButton.textContent = player
+        selectPlayerButton.addEventListener("click", displayPlayerForm)
+        document.querySelector('.player-select').appendChild(selectPlayerButton)
+        
+        return 
+    }
+    
+    const player1Button = createPlayerSelectButton('Player 1')
+    const player2Button = createPlayerSelectButton('Player 2')
+
+   
+
+
+
+    document.querySelector('form').addEventListener('submit', (evt)=>{
+        evt.preventDefault()
+        const data = new FormData(evt.target)
+        const dialog = document.querySelector('dialog')
+        dialog.close()
+        const dataObject = Object.fromEntries(data.entries())
+        console.log(dataObject);
+
+        return
+    })
+
 
     function showCurrentPlayer(){
         const currentPlayer = playerController.getCurrentPlayer()
@@ -84,14 +133,12 @@ const displayManager = (function(){
             squareDivs.forEach(square=> square.textContent = '')
 
     }
-    return {updateDisplay, startGame, resetBoardDisplay}
+    return {updateDisplay, startGame, resetBoardDisplay, createPlayerSelectButton, displayPlayerForm}
 })()
 
 
-
-
 const boardManager = (function(){
-    let gameBoardObject = new Array(3).fill("_").map((row)=> new Array(3))
+    let gameBoardObject = new Array(3).fill(" ").map((row)=> new Array(3))
 
     function returnGameBoard(){
         return gameBoardObject
@@ -113,7 +160,7 @@ const boardManager = (function(){
     
     function resetGameBoard(){
         gameBoardObject.map(row => {
-            row.fill("_") 
+            row.fill(" ") 
                })
                console.log(gameBoardObject);
         return gameBoardObject
@@ -130,29 +177,29 @@ const boardManager = (function(){
             case "hor":
                 gameBoardObject = [
                     ["X","X","X"],
-                    ["_","_","_"],
-                    ["_","_","_"],
+                    [" "," "," "],
+                    [" "," "," "],
                 ]
                 break;
             case "ver":
                 gameBoardObject = [
-                    ["_","_","O"],
-                    ["_","_","O"],
-                    ["_","_","O"],
+                    [" "," ","O"],
+                    [" "," ","O"],
+                    [" "," ","O"],
                 ]
                 break;
             case "diag":
                 gameBoardObject = [
-                    ["_","_","X"],
-                    ["_","X","_"],
-                    ["X","_","_"],
+                    [" "," ","X"],
+                    [" ","X"," "],
+                    ["X"," "," "],
                 ]
                 break;
             case "rand":
                 gameBoardObject = [
-                    ["_","_","_"],
-                    ["_","_","_"],
-                    ["_","_","_"],
+                    [" "," "," "],
+                    [" "," "," "],
+                    [" "," "," "],
                 ]
                 Array(3).fill()
 
@@ -169,6 +216,19 @@ const boardManager = (function(){
 const playerController = (function(){
     let round = 1
     let currentPlayer = 'X'
+
+    //player object constructor
+    const Player = function (token, name){
+        this.token = token
+        this.name = name
+        this.score = 0
+    }
+
+
+    const player1 = new Player()
+    const player2 = new Player()
+
+
 
     function goToNextRound(){
         round++
@@ -190,7 +250,7 @@ const playerController = (function(){
         currentPlayer = 'X'
     }
     
-    
+
     // double module pattern?
         
     const scoreKeeper = (function(){
