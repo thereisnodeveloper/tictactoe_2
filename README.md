@@ -3,16 +3,16 @@ review of tictactoe
 
 # Skills/Concepts
 - [X] Objects
-- [ ] Constructors
-- [ ] Prototyping
-- [ ] Factory functions
+- [X] Constructors
+- [X] Prototypal Inheritance
+- [X] Factory functions
 - [X] Closure
 - [X] IIFE (Immediately Invoked Function Expressions)
 - [X] Object Shorthand Notation
 - [X] Destructuring
 - [X] Template literals
-- [x] Rest parameter
-- [x] Default parameters
+- [X] Rest parameter
+- [X] Default parameters
 - [X] Prototypal inheritance
 - [X] Module Pattern
 - [X] Private variables

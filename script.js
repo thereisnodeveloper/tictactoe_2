@@ -5,6 +5,7 @@ const gameController = (function(){
     let player1, player2
     let round = 1
     let currentPlayer
+    let tokenArray
         
     //player object constructor
     const Player = function (token, name){
@@ -125,6 +126,10 @@ const gameController = (function(){
                 const squareDivs = document.querySelectorAll('.boardContainer > div')
                 squareDivs.forEach(square=> square.addEventListener('click', addToSquareOnClick))
                 currentPlayer = getPlayers()[0]
+                tokenArray = scoreKeeper.saveTokens(
+                    getPlayers()[0].token,
+                    getPlayers()[1].token
+                    )
                 updateDisplay()        
                 document.querySelector('.player-select').remove()
               
@@ -153,8 +158,9 @@ const gameController = (function(){
             }
             e.target.textContent = currentPlayer.token
             
+            // scoreKeeper
             //check if winning pattern
-            const result = gameController.scoreKeeper.checkWinningPattern()
+            const result = scoreKeeper.checkWinningPattern()
             if(result){
                 message.textContent = `Player ${currentPlayer.name} Wins!`
                 removeBoardEventListeners()
@@ -309,19 +315,19 @@ const gameController = (function(){
 
 
             function saveTokens(...args){
-                let tokenArray = args
+                tokenArray = args
                 return tokenArray
             }
 
 
 
-            let tokenArray = saveTokens(
-                getPlayers()[0].token,
-                getPlayers()[1].token
-                )
+           
+
 
     
             function checkWinningPattern(...args){
+                console.log('tokenarray'+ tokenArray);
+
                 let board 
                 const conditionsArray = tokenArray
                 // console.log({conditionsArray});
@@ -399,7 +405,7 @@ const gameController = (function(){
 
             }
 
-            return {checkWinningPattern}
+            return {saveTokens,checkWinningPattern}
         })()
 
 
@@ -418,5 +424,5 @@ const gameController = (function(){
             })
         })()
 
-        return {goToNextRound, getCurrentPlayer, scoreKeeper, getRound, resetPlayerToP1, getPlayers}
+        return {goToNextRound, getCurrentPlayer, getRound, resetPlayerToP1, getPlayers}
 })()
