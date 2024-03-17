@@ -1,12 +1,26 @@
+
 const gameController = (function(){
+    const dialog = document.querySelector('dialog')
+    let formDataCount = 1
+    let player1, player2
+    let round = 1
+    let currentPlayer
+        
     //player object constructor
     const Player = function (token, name){
         this.token = token
         this.name = name
         this.score = 0
     }
+    player1 = new Player('X','player1')
+    player2 = new Player('O','player2')
+    
+    const getPlayers = function(){
+        // console.log(player1, player2)
+        return[player1, player2]
+    }
 
-    const displayManager = function(){
+    const displayManager = (function(){
         
         const message = document.querySelector('.message')
 
@@ -16,12 +30,10 @@ const gameController = (function(){
             
             const playerText = document.createElement(`div`)
             playerText.classList.add('player-text')
-
             playerText.textContent = `${evt.target.textContent}`
 
             //if text exist, replace rather than add another one
             dialog.prepend(playerText)
-
             dialog.showModal()
             //disable ESC and clicking outside to close modal
             const preventEscapeKey = function(evt)  
@@ -34,63 +46,74 @@ const gameController = (function(){
             evt.target.removeEventListener("click", displayPlayerForm)
             evt.target.remove()
             }
-        //FIXME: both buttons reappear after filling out Player 2
+        
         const createPlayerSelectButton = function(player){
-            const selectPlayerButton = document.createElement(`button`)
-            const playerWhiteSpaceRemoved = player.replace(' ','')
-            selectPlayerButton.classList.add(`${playerWhiteSpaceRemoved}`)
+            const selectPlayerButton = document.createElement('button')
             selectPlayerButton.textContent = player
             selectPlayerButton.addEventListener("click", displayPlayerForm)
             document.querySelector('.player-select').appendChild(selectPlayerButton)
             
+            attachEListenerToForm()
+
             return 
         }
         
 
+        const attachEListenerToForm = function (){
+            document.querySelector('form').addEventListener('submit', resetForm)
+            document.querySelector('form').addEventListener('submit', handleForm)
+            document.querySelector('form').addEventListener('submit', processFormData)
+        }
 
-
-        document.querySelector('form').addEventListener('submit', (evt)=>{
-            evt.preventDefault()
-            const data = new FormData(evt.target)
+        
+       const handleForm = function (evt){
+            evt.preventDefault()        
             const dialog = document.querySelector('dialog')
             dialog.close()
-            
-            //reset form only if at least 1 of the button elements are there
-            // document.removeEventListener('keydown', displayManager.pre)
+            attachEListenerToForm()
 
-            dialog.innerHTML = `
-            <form action="?" method="post">
-                <label for="player-name">Player Name: <input type="text"
-                id="player-name" name="user-name" required></label>
-                <label for="token"> Input Token (any one character) <input
-                type="text" id="token" maxlength="1" name="user-token" required ></label>
-                <button type="submit">Accept</button>
-             </form>`
+        }
+            //reset form
+        const resetForm = function(){
+        dialog.innerHTML = `
+        <form action="?" method="post">
+            <label for="player-name">Player Name: <input type="text"
+            id="player-name" name="user-name" required></label>
+            <label for="token"> Input Token (any one character) <input
+            type="text" id="token" maxlength="1" name="user-token" required ></label>
+            <button type="submit">Accept</button>
+            </form>`            
 
-            
+        }
 
+        const processFormData = function(evt){
+            const data = new FormData(evt.target)           
+            // const dataObject = Object.fromEntries(data.entries())
             const dataArray = [...data.entries()]
         
             const playerToken = dataArray[1][1];
             const playerName = dataArray[0][1];
-            if(player1){
-                var player2 = new Player(playerToken, playerName)
-                console.log(player2);
-            }
-            else{
-                var player1 = new Player(playerToken, playerName)
-                console.log(player1);
-            
-            }
-            // const player2 = 
 
-            return
-        })
+            if (formDataCount === 1){
+                formDataCount = 2
+                player1.token = playerToken
+                player1.name = playerName
+                
+                document.querySelector('.player-text').textContent = player1.name}
+            else{
+                player2.token = playerToken
+                player2.name = playerName
+                document.querySelector('.player-text').textContent = player2.name
+            }
+            return {playerToken, playerName}
+        }
+
+       
 
 
         function showCurrentPlayer(){
             const currentPlayer = gameController.getCurrentPlayer()
-            document.querySelector('.player-text').textContent = currentPlayer
+            document.querySelector('.player-text').textContent = currentPlayer.name
         }
 
         function showRound(){
@@ -101,7 +124,10 @@ const gameController = (function(){
         function startGame(){
                 const squareDivs = document.querySelectorAll('.boardContainer > div')
                 squareDivs.forEach(square=> square.addEventListener('click', addToSquareOnClick))
+                currentPlayer = getPlayers()[0]
                 updateDisplay()        
+                document.querySelector('.player-select').remove()
+              
         }
 
         function addToSquareOnClick(e){
@@ -113,23 +139,24 @@ const gameController = (function(){
                 [[1,0],[1,1],[1,2]],
                 [[2,0],[2,1],[2,2]]
             ]
+            console.log(boardIndex);
             const SquareIndex = e.target.getAttribute('index') - 1
             const coords = boardIndex.flat(1)[SquareIndex]
             
             
             //check if square is occupied
-            if(boardManager.addToGameBoard(currentPlayer, coords ) === 'Square Occupied'){
+            if(boardManager.addToGameBoard(currentPlayer.token, coords ) === 'Square Occupied'){
                 message.textContent = 'Square Occupied'
                 return
             } else{
                 message.textContent = ' '
             }
-            e.target.textContent = currentPlayer
+            e.target.textContent = currentPlayer.token
             
             //check if winning pattern
             const result = gameController.scoreKeeper.checkWinningPattern()
             if(result){
-                message.textContent = `Player ${currentPlayer} Wins!`
+                message.textContent = `Player ${currentPlayer.name} Wins!`
                 removeBoardEventListeners()
                 return
             }
@@ -137,7 +164,7 @@ const gameController = (function(){
             gameController.goToNextRound()
             const round = gameController.getRound()
             document.querySelector('.round-text').textContent = round
-            document.querySelector('.player-text').textContent = currentPlayer
+            document.querySelector('.player-text').textContent = currentPlayer.name
 
             displayManager.updateDisplay()
             
@@ -165,9 +192,11 @@ const gameController = (function(){
                 squareDivs.forEach(square=> square.textContent = '')
 
         }
-        return {updateDisplay, startGame, resetBoardDisplay, createPlayerSelectButton, displayPlayerForm}
-    }
-    displayManager()
+
+
+        return {updateDisplay, startGame, resetBoardDisplay, createPlayerSelectButton, displayPlayerForm, player1,player2 }
+    })()
+
 
     const boardManager = (function(){
         let gameBoardObject = new Array(3).fill(" ").map((row)=> new Array(3))
@@ -178,8 +207,8 @@ const gameController = (function(){
 
         function addToGameBoard(piece, location = [0,0]){
             const [row, column] = location
-            if(gameBoardObject[row][column] !== 'X'
-            && gameBoardObject[row][column] !== 'O')
+            if(gameBoardObject[row][column] !== getPlayers()[0].token
+            && gameBoardObject[row][column] !== getPlayers()[1].token)
 
             {
                 gameBoardObject[row][column] = piece
@@ -198,64 +227,65 @@ const gameController = (function(){
             return gameBoardObject
         }
 
-        function createTestBoard(boardPattern){
-            let pattern = boardPattern
-            if(!pattern){
-                pattern = prompt('enter pattern (hor, ver, diag)')
-            } else {
-                pattern = pattern
-            }
-            switch (pattern){
-                case "hor":
-                    gameBoardObject = [
-                        ["X","X","X"],
-                        [" "," "," "],
-                        [" "," "," "],
-                    ]
-                    break;
-                case "ver":
-                    gameBoardObject = [
-                        [" "," ","O"],
-                        [" "," ","O"],
-                        [" "," ","O"],
-                    ]
-                    break;
-                case "diag":
-                    gameBoardObject = [
-                        [" "," ","X"],
-                        [" ","X"," "],
-                        ["X"," "," "],
-                    ]
-                    break;
-                case "rand":
-                    gameBoardObject = [
-                        [" "," "," "],
-                        [" "," "," "],
-                        [" "," "," "],
-                    ]
-                    Array(3).fill()
+        // function createTestBoard(boardPattern){
+        //     const p1 = getPlayers()[0].token
+        //     console.log(p1);
 
-                    break;
-            }
+        //     let pattern = boardPattern
+        //     if(!pattern){
+        //         pattern = prompt('enter pattern (hor, ver, diag)')
+        //     } else {
+        //         pattern = pattern
+        //     }
+        //     switch (pattern){
+        //         case "hor":
+        //             gameBoardObject = [
+        //                 ["X","X","X"],
+        //                 [" "," "," "],
+        //                 [" "," "," "],
+        //             ]
+        //             break;
+        //         case "ver":
+        //             gameBoardObject = [
+        //                 [" "," ","O"],
+        //                 [" "," ","O"],
+        //                 [" "," ","O"],
+        //             ]
+        //             break;
+        //         case "diag":
+        //             gameBoardObject = [
+        //                 [" "," ","X"],
+        //                 [" ","X"," "],
+        //                 ["X"," "," "],
+        //             ]
+        //             break;
+        //         case "rand":
+        //             gameBoardObject = [
+        //                 [" "," "," "],
+        //                 [" "," "," "],
+        //                 [" "," "," "],
+        //             ]
+        //             Array(3).fill()
+
+        //             break;
+        //     }
             
         
-            return gameBoardObject
-        }
+        //     return gameBoardObject
+        // }
 
-        return {returnGameBoard, addToGameBoard, resetGameBoard,createTestBoard}
+        return {returnGameBoard, addToGameBoard, resetGameBoard}//createTestBoard}
     })()
 
-
-        let round = 1
-        let currentPlayer = 'X'
-
-
+        
         function goToNextRound(){
             round++
-            currentPlayer === 'X' ? currentPlayer = 'O' : currentPlayer = 'X'
+            currentPlayer.name === getPlayers()[0].name ? currentPlayer = getPlayers()[1] : currentPlayer = getPlayers()[0]
+            console.log(currentPlayer);
             return round
         }
 
+        
         function getCurrentPlayer(){
             return currentPlayer
         }
@@ -266,23 +296,29 @@ const gameController = (function(){
         function resetRound(){
             round = 1
         }
-        function resetPlayerToX(){
-            currentPlayer = 'X'
+        function resetPlayerToP1(){
+            currentPlayer = getPlayers()[0]
         }
         
 
         // double module pattern?
             
         const scoreKeeper = (function(){
-            let scoreX = 0;
-            let scoreO = 0;
+            let player1Score = 0;
+            let player2Score = 0;
 
 
             function saveTokens(...args){
                 let tokenArray = args
                 return tokenArray
             }
-            let tokenArray = saveTokens('O','X')
+
+
+
+            let tokenArray = saveTokens(
+                getPlayers()[0].token,
+                getPlayers()[1].token
+                )
 
     
             function checkWinningPattern(...args){
@@ -294,11 +330,14 @@ const gameController = (function(){
                 // board = boardManager.createTestBoard('diag')
 
                 console.log({board});
-                
+                const [p1, p2] = getPlayers()
+                const p1T = p1.token 
+                const p2T = p2.token 
+
                     //Hor
                 if( board.some(row => 
-                    row.join(',') === ['X','X','X'].join(',') 
-                    || row.join(',') === ['O','O','O'].join(','))){
+                    row.join(',') === [p1T,p1T,p1T].join(',') 
+                    || row.join(',') === [p2T,p2T,p2T].join(','))){
                         return true
                     }
                 
@@ -373,11 +412,11 @@ const gameController = (function(){
                 boardManager.resetGameBoard()
                 displayManager.resetBoardDisplay()
                 resetRound()
-                resetPlayerToX()
+                resetPlayerToP1
                 displayManager.updateDisplay()
 
             })
         })()
 
-        return {goToNextRound, getCurrentPlayer, scoreKeeper, getRound, resetPlayerToX}
+        return {goToNextRound, getCurrentPlayer, scoreKeeper, getRound, resetPlayerToP1, getPlayers}
 })()
